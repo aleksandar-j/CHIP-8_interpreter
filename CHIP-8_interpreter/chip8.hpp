@@ -1,0 +1,77 @@
+#pragma once
+
+#include <Windows.h>
+#include <stack>
+#include <random>
+#include <stdlib.h>
+#include <stdint.h>
+
+using namespace std;
+
+class Chip8
+{
+public:
+
+    /* CODE */
+
+    Chip8(const uint16_t* instructions, uint32_t* pixels, int width, int height);
+
+    void execute_cycle();
+
+    void color_pixel(uint32_t x, uint32_t y, uint32_t color);
+    void color_pixel_real(uint32_t x, uint32_t y, uint32_t color);
+
+    void inc_PC();
+    void dec_PC();
+
+    /* DATA */
+
+    // Registers
+    uint8_t V[16];
+    uint16_t I;
+
+    // Timers
+    uint8_t DT;
+    uint8_t ST;
+
+    // Instruction pointer
+    uint16_t PC;
+
+    // Stack
+    stack<uint16_t> S;
+
+    // RAM
+    uint8_t M[4096] = {
+        0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
+        0x20, 0x60, 0x20, 0x20, 0x70, // 1
+        0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
+        0xF0, 0x10, 0xF0, 0x10, 0xF0, // 3
+        0x90, 0x90, 0xF0, 0x10, 0x10, // 4
+        0xF0, 0x80, 0xF0, 0x10, 0xF0, // 5
+        0xF0, 0x80, 0xF0, 0x90, 0xF0, // 6
+        0xF0, 0x10, 0x20, 0x40, 0x40, // 7
+        0xF0, 0x90, 0xF0, 0x90, 0xF0, // 8
+        0xF0, 0x90, 0xF0, 0x10, 0xF0, // 9
+        0xF0, 0x90, 0xF0, 0x90, 0x90, // A
+        0xE0, 0x90, 0xE0, 0x90, 0xE0, // B
+        0xF0, 0x80, 0x80, 0x80, 0xF0, // C
+        0xE0, 0x90, 0x90, 0x90, 0xE0, // D
+        0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
+        0xF0, 0x80, 0xF0, 0x80, 0x80  // F
+    };
+
+    // Screen pixels
+    uint32_t* PIXELS;
+
+    int width;
+    int height;
+
+    int wh_multiplier;
+
+    bool redraw_screen;
+
+    // Keyboard
+    bool key_processed;
+    bool pressed[16];
+
+};
